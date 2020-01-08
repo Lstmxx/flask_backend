@@ -4,7 +4,7 @@ class Article(db.Model):
     __tablename__ = 'article'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
-    article_path = db.Column(db.String(255))
+    content = db.Column(db.Text(length=(2**31)-1))
     tag_id = db.Column(db.Integer, db.ForeignKey('article_tag.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     create_time = db.Column(db.DateTime, default=datetime.now)
