@@ -16,16 +16,6 @@ def save_article():
         'status': 200,
         'message': 'SAVE SUCCESS'
     }
-    token = request.headers.get('Token')
-    try:
-        data = token_generator.loads(token)
-    except:
-        response = {
-            'data': '',
-            'status': 403,
-            'message': '重新登陆啦靓仔'
-        }
-        return jsonify(response)
     if data['tokenType'] == 'user':
         userId = data['userId']
         values = request.get_json()
@@ -80,7 +70,9 @@ def save_article():
 @article_bp.route('/api/article/detail/<article_id>', methods=['GET'])
 @verify_token
 def load_article_detail(article_id):
-    print(article_id)
+    print(f'文章ID：{article_id}')
+    values = request.get_json()
+
     response = {
         'data': 'hello Flask',
         'status': 200
@@ -90,6 +82,8 @@ def load_article_detail(article_id):
 @article_bp.route('/api/article/list', methods=['GET'])
 @verify_token
 def load_article_list():
+    values = request.get_json()
+    
     response = {
         'data': 'hello Flask',
         'status': 200

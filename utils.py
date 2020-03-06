@@ -15,8 +15,8 @@ def verify_token(func):
             'status': 200
         }
         print(request.headers)
-        print(f"token is: {request.headers.get('Token')}")
-        token = request.headers.get('Token')
+        print(f"token is: {request.headers.get('Lstmxx-Token')}")
+        token = request.headers.get('Lstmxx-Token')
         if token:
             try:
                 data = token_generator.loads(token)

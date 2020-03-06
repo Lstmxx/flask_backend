@@ -77,7 +77,7 @@ def get_user_info():
         'status': 200,
         'message': 'success'
     }
-    token = request.headers.get('Token')
+    token = request.headers.get('Lstmxx-Token')
     data = token_generator.loads(token)
     if data['tokenType'] == 'user':
         userId = data['userId']
@@ -100,9 +100,9 @@ def get_token():
     }
     print(request.headers)
     token = None
-    if request.headers.get('Token'):
+    if request.headers.get('Lstmxx-Token'):
         try:
-            data = token_generator.loads(request.headers.get('Token'))
+            data = token_generator.loads(request.headers.get('Lstmxx-Token'))
             print(data)
         except:
             token = token_generator.dumps({
@@ -114,3 +114,13 @@ def get_token():
         }).decode('utf-8')
     response['data']['token'] = token
     return jsonify(response)
+
+@user_bp.route('/api/logout', methods=['GET'])
+def logout():
+    response = {
+        'data': {
+            'token': ''
+        },
+        'status': 200,
+        'message': 'GET TOKEN SUCCESS'
+    }
