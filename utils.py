@@ -28,7 +28,7 @@ def verify_token(func):
                 }
                 return jsonify(response)
             if data['tokenType']:
-                return func(*args, **kwargs)
+                return func(*args, **kwargs, tokenData = data)
             else:
                 response = {
                     'data': '',

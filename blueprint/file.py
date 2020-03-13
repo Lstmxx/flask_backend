@@ -1,10 +1,13 @@
 from flask import request, jsonify, g, session, make_response, Blueprint
 from utils import verify_token, token_generator
+import os
+import time
 
 file_bp = Blueprint('file', __name__)
 
 @file_bp.route('/api/up-load/image', methods=['post'])
-def save_up_load_file():
+@verify_token
+def save_up_load_file(tokenData):
     upLoadFile = request.files['image']
     print(upLoadFile.filename)
     print(type(upLoadFile))

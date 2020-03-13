@@ -69,7 +69,7 @@ def register():
 
 @user_bp.route('/api/user-info', methods=['POST'])
 @verify_token
-def get_user_info():
+def get_user_info(tokenData):
     response = {
         'data': {
             'userInfo': ''
@@ -77,10 +77,8 @@ def get_user_info():
         'status': 200,
         'message': 'success'
     }
-    token = request.headers.get('Lstmxx-Token')
-    data = token_generator.loads(token)
-    if data['tokenType'] == 'user':
-        userId = data['userId']
+    if tokenData['tokenType'] == 'user':
+        userId = tokenData['userId']
         print(userId)
         user = User.query.get(userId)
         if user:
@@ -122,5 +120,6 @@ def logout():
             'token': ''
         },
         'status': 200,
-        'message': 'GET TOKEN SUCCESS'
+        'message': 'LOGOUT SUCCESS'
     }
+    return jsonify(response)

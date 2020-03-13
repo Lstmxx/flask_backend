@@ -17,6 +17,7 @@ class User(db.Model):
     password = db.Column(db.String(64))
     create_time = db.Column(db.DateTime, default=datetime.now)
     articles = db.relationship('Article')
+    avatar_image = db.Column(db.String(64))
     
 class ArticleTag(db.Model):
     __tablename__ = 'article_tag'

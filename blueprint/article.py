@@ -8,7 +8,7 @@ article_bp = Blueprint('article', __name__)
 
 @article_bp.route('/api/article/store', methods=['POST'])
 @verify_token
-def save_article():
+def save_article(tokenData):
     response = {
         'data': {
             'article': ''
@@ -16,8 +16,8 @@ def save_article():
         'status': 200,
         'message': 'SAVE SUCCESS'
     }
-    if data['tokenType'] == 'user':
-        userId = data['userId']
+    if tokenData['tokenType'] == 'user':
+        userId = tokenData['userId']
         values = request.get_json()
         required = ['article']
         if not all(k in values for k in required):
@@ -72,7 +72,6 @@ def save_article():
 def load_article_detail(article_id):
     print(f'文章ID：{article_id}')
     values = request.get_json()
-
     response = {
         'data': 'hello Flask',
         'status': 200
@@ -82,8 +81,15 @@ def load_article_detail(article_id):
 @article_bp.route('/api/article/list', methods=['GET'])
 @verify_token
 def load_article_list():
+    response = {
+        'data': '',
+        'status': 500,
+        'message': '参数错误'
+    }
     values = request.get_json()
-    
+    require = ['page', 'pageSize']
+    if not all(k in values for k in require):
+        return jsonify(response)
     response = {
         'data': 'hello Flask',
         'status': 200
@@ -92,7 +98,7 @@ def load_article_list():
 
 @article_bp.route('/api/tag/list', methods=['GET'])
 @verify_token
-def get_tag_list():
+def get_tag_list(tokenData):
     response = {
         'data': {
             'tagList': ''
