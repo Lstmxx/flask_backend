@@ -78,8 +78,7 @@ def load_article_detail(article_id):
     }
     return jsonify(response)
 
-@article_bp.route('/api/article/list', methods=['GET'])
-@verify_token
+@article_bp.route('/api/article/list', methods=['POST'])
 def load_article_list():
     response = {
         'data': '',
@@ -90,15 +89,19 @@ def load_article_list():
     require = ['page', 'pageSize']
     if not all(k in values for k in require):
         return jsonify(response)
+    articleList = Article.query.order_by(Article.create_time.desc()).all()
+    print(articleList)
     response = {
-        'data': 'hello Flask',
-        'status': 200
+        'data': {
+            'articleList': JSONHelper.to_json_list(articleList)
+        },
+        'status': 200,
+        'message': '成功'
     }
     return jsonify(response)
 
-@article_bp.route('/api/tag/list', methods=['GET'])
-@verify_token
-def get_tag_list(tokenData):
+@article_bp.route('/api/tag/list', methods=['POST'])
+def get_tag_list():
     response = {
         'data': {
             'tagList': ''
