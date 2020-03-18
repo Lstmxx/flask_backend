@@ -78,8 +78,8 @@ def load_article_detail(article_id):
     }
     return jsonify(response)
 
-@article_bp.route('/api/article/list', methods=['POST'])
-def load_article_list():
+@article_bp.route('/api/article/page', methods=['POST'])
+def load_article_page():
     response = {
         'data': '',
         'status': 500,
