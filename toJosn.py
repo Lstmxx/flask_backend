@@ -5,7 +5,6 @@ class JSONHelper():
         for item in target_list:
             jsondata = {}
             for k, v in vars(item).items():
-                print(k)
                 if k != '_sa_instance_state':
                     tdic={
                         k: v

@@ -5,6 +5,7 @@ class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index = True)
     content = db.Column(db.Text(length=(2**31)-1))
+    description = db.Column(db.Text(length=(2**31)-1))
     tag_id = db.Column(db.Integer, db.ForeignKey('article_tag.id'), index = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), index = True)
     create_time = db.Column(db.DateTime, default=datetime.utcnow, index = True)
@@ -27,6 +28,7 @@ class ArticleTag(db.Model):
     __tablename__ = 'article_tag'
     id = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column(db.String(64))
+    tag_color = db.Column(db.String(64))
 
 class Comment(db.Model):
     __tablename__ = 'comment'

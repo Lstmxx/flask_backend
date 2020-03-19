@@ -28,7 +28,7 @@ def save_article(tokenData):
             }
             return jsonify(response)
         values = values['article']
-        required = ['name', 'tagId', 'content']
+        required = ['name', 'tagId', 'content', 'description']
         if not all(k in values for k in required):
             response = {
                 'data': '',
@@ -49,7 +49,7 @@ def save_article(tokenData):
             response = {
                 'data': '',
                 'status': 500,
-                'message': '没有这种文章标题'
+                'message': '没有这种文章类型'
             }
         if values['content'] == '':
             response = {
@@ -57,11 +57,13 @@ def save_article(tokenData):
                 'status': 500,
                 'message': '没有文章啊'
             }
+        description = ''
         article = Article(
-            name=values['name'],
-            content=values['content'],
-            tag_id=values['tagId'],
-            user_id=userId
+            name = values['name'],
+            content = values['content'],
+            tag_id = values['tagId'],
+            description = values['description'],
+            user_id = userId
         )
         db.session.add(article)
         db.session.commit()
@@ -89,11 +91,22 @@ def load_article_page():
     require = ['page', 'pageSize']
     if not all(k in values for k in require):
         return jsonify(response)
-    articleList = Article.query.order_by(Article.create_time.desc()).all()
+    queryList = ['tag_id', 'name', 'create_time', 'avatar_image', 'watch_num', 'like_num', 'description']
+    resList = db.session.query(Article.tag_id,
+                                Article.name,
+                                Article.create_time,
+                                Article.avatar_image,
+                                Article.watch_num,
+                                Article.like_num,
+                                Article.description).order_by(Article.create_time.desc()).all()
+    articleList = []
+    for res in resList:
+        data = dict(map(lambda x, y: [x, y], queryList, res))
+        articleList.append(data)
     print(articleList)
     response = {
         'data': {
-            'articleList': JSONHelper.to_json_list(articleList)
+            'articleList': articleList
         },
         'status': 200,
         'message': '成功'
