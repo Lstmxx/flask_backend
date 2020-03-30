@@ -23,7 +23,16 @@ class User(db.Model):
     create_time = db.Column(db.DateTime, default=datetime.utcnow)
     articles = db.relationship('Article')
     avatar_image = db.Column(db.String(64))
+    root_id = db.Column(db.Integer, db.ForeignKey('authorization.id'), index = True)
     
+class Authorization(db.Model):
+    __tablename__ = 'authorization'
+    id = db.Column(db.Integer, primary_key=True)
+    create_time = db.Column(db.DateTime, default=datetime.utcnow, index = True)
+    update_time = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, index = True)
+    name = db.Column(db.String(64))
+    root = db.Column(db.Integer)
+
 class ArticleTag(db.Model):
     __tablename__ = 'article_tag'
     id = db.Column(db.Integer, primary_key=True)

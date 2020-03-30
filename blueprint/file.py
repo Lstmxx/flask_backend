@@ -12,9 +12,10 @@ def save_up_load_file(tokenData):
     print(upLoadFile.filename)
     print(type(upLoadFile))
     filename = upLoadFile.filename
+    
     if os.path.exists(f'media/{filename}'):
         filenames = filename.split('.')
-        filename = filenames[0] + f'({time.time()}).' + filenames[1]
+        filename = filenames[0] + f'_{ int(round(time.time() * 1000)) }.' + filenames[1]
     with open(f'media/{filename}', 'wb') as f:
         f.write(upLoadFile.stream.read())
     response = {
