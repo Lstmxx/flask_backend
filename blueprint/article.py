@@ -71,12 +71,20 @@ def save_article(tokenData):
         return jsonify(response)
 
 @article_bp.route('/api/article/detail/<article_id>', methods=['GET'])
-@verify_token
 def load_article_detail(article_id):
     print(f'文章ID：{article_id}')
-    values = request.get_json()
     response = {
-        'data': 'hello Flask',
+        'data': '没ID查什么呀',
+        'status': 200
+    }
+    if not article_id:
+        return response
+    article = Article.query.get(article_id)
+    print(article)
+    response = {
+        'data': {
+            'article': JSONHelper.to_json(article)
+        },
         'status': 200
     }
     return jsonify(response)
@@ -92,8 +100,9 @@ def load_article_page():
     require = ['page', 'pageSize']
     if not all(k in values for k in require):
         return jsonify(response)
-    queryList = ['tag_id', 'name', 'create_time', 'avatar_image', 'watch_num', 'like_num', 'description']
-    resList = db.session.query(Article.tag_id,
+    queryList = ['id', 'tag_id', 'name', 'create_time', 'avatar_image', 'watch_num', 'like_num', 'description']
+    resList = db.session.query(Article.id,
+                                Article.tag_id,
                                 Article.name,
                                 Article.create_time,
                                 Article.avatar_image,
