@@ -80,13 +80,24 @@ def load_article_detail(article_id):
     if not article_id:
         return response
     article = Article.query.get(article_id)
-    print(article)
-    response = {
-        'data': {
-            'article': JSONHelper.to_json(article)
-        },
-        'status': 200
-    }
+    if article:
+        watch_num = article.watch_num + 1
+        print(watch_num)
+        Article.query.filter_by(id=article_id).update({'watch_num': watch_num})
+        db.session.commit()
+        response = {
+            'data': {
+                'article': JSONHelper.model_to_json(article)
+            },
+            'status': 200
+        }
+    else:
+        response = {
+            'data': {
+                'article': None
+            },
+            'status': 200
+        }
     return jsonify(response)
 
 @article_bp.route('/api/article/page', methods=['POST'])
@@ -113,7 +124,6 @@ def load_article_page():
     for res in resList:
         data = dict(map(lambda x, y: [x, y], queryList, res))
         articleList.append(data)
-    print(articleList)
     response = {
         'data': {
             'articleList': articleList

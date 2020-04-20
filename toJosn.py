@@ -1,4 +1,14 @@
+def serialize(model):
+    from sqlalchemy.orm import class_mapper
+    columns = [c.key for c in class_mapper(model.__class__).columns]
+    return dict((c, getattr(model, c)) for c in columns)
+
 class JSONHelper():
+    @staticmethod
+    def model_to_json(item):
+        item_dict = serialize(item)
+        return item_dict
+
     @staticmethod
     def to_json(item):
         jsondata = {}
@@ -9,6 +19,7 @@ class JSONHelper():
                 }
                 jsondata.update(tdic)
         return jsondata
+        
     @staticmethod
     def to_json_list(target_list):
         result = []
